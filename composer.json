@@ -1,0 +1,18 @@
+{
+    "name": "eykj/office",
+    "description": "一一科技office组件",
+    "license": "MIT",
+    "keywords": [
+        "eykj",
+        "office"
+    ],
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Eykj\\Office\\": "src/"
+        },
+        "files": [
+        ]
+    }
+}
