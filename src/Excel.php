@@ -81,7 +81,7 @@ class Excel
             }
         }
     
-        return $this->downloadExcel($newExcel,$filename,$format);
+        return $this->downloadExcel($newExcel,$filename,$format,$dir);
     }
 
         /**
