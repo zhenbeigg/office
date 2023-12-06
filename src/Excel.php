@@ -39,12 +39,13 @@ class Excel
 
     /**
      * @author: 布尔
-     * @name: 方法名
+     * @name: 导出excel
      * @param {array} $data 数据信息
      * @param {string} $filename 文件名称
      * @param {string} $format 文件后缀
+    * @param {string} $dir 文件目录
      */    
-    public function exportExcel(array $data,string $filename= '',string $format='Xls') 
+    public function exportExcel(array $data,string $filename= '',string $format='Xls',string $dir='') 
     {
         /* 英文A-Z数组*/
         $earr = range('A','Z');
@@ -82,7 +83,57 @@ class Excel
     
         return $this->downloadExcel($newExcel,$filename,$format);
     }
-    
+
+        /**
+     * @author: 布尔
+     * @name: 自定义头部导出excel
+     * @param {array} $data 数据信息
+     * @param {string} $filename 文件名称
+     * @param {string} $format 文件后缀
+     * @param {string} $dir 文件目录
+     */    
+    public function exportExcelV2(array $header,array $data,string $filename= '',string $format='Xls',string $dir='') 
+    {
+        /* 英文A-Z数组*/
+        $earr = range('A','Z');
+        /* 创建一个新的excel文档 */
+        $newExcel = new Spreadsheet(); 
+        /*  获取当前操作sheet的对象*/
+        $objSheet = $newExcel->getActiveSheet(); 
+        /* 设置当前sheet的标题 */
+        $objSheet->setTitle($filename);  
+        
+        /*设置宽度为true,不然太窄了*/
+        foreach($earr as $k=>$v){
+        if($k+1>=count($data[0])){break;/*跳出循环 */}
+            $objSheet->getColumnDimension($v)->setAutoSize(true);
+        }
+        /* 设置头部信息 */
+        foreach ($header as $k1 => $v1) {
+            $i = 0;
+            foreach($v1 as $k2=>$v2){
+                $objSheet->setCellValue($earr[$i].$k1+1,$v2.' ');
+                $i++;
+            }
+        }
+        $i = 0;
+        /* 写入内容标题 */
+        foreach($data[0] as $k2=>$v2){
+            $objSheet->setCellValue($earr[$i].count($header)+2,$k2.' ');
+            $i++;
+        }
+        /* 写入内容 */
+        foreach ($data as $k3 => $v3) {
+            $k4 = $k3 + count($header)+3;
+            $i = 0;
+            foreach($v3 as $v4){
+                $objSheet->setCellValue($earr[$i].$k4,$v4.' ');
+                $i++;
+            }
+        }
+        return $this->downloadExcel($newExcel,$filename,$format,$dir);
+    }
+
     /**
      * @author: 布尔
      * @name: 传入xls并下载
